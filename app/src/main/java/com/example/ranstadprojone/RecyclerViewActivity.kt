@@ -2,8 +2,12 @@ package com.example.ranstadprojone
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class RecyclerViewActivity : AppCompatActivity() {
 
@@ -11,6 +15,30 @@ class RecyclerViewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recycler_view)
+
+        var makeCall = ApiCllient.retrofitBuilder.getData()
+
+        makeCall.enqueue(object  : Callback<List<Users>>{
+            override fun onResponse(call: Call<List<Users>>?, response: Response<List<Users>>?) {
+                var myUserList : List<Users>? = response!!.body()
+                Log.i("mytag", "$myUserList")
+            }
+
+            override fun onFailure(call: Call<List<Users>>?, t: Throwable?) {
+               Log.i("mytag", "Error is ${t.toString()}" )
+            }
+
+        } )
+
+
+
+
+
+
+
+
+
+
 
         var myRecyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         myRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
