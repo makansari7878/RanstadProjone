@@ -11,61 +11,37 @@ import retrofit2.Response
 
 class RecyclerViewActivity : AppCompatActivity() {
 
-    lateinit var mySingerlist : ArrayList<SingersData>
+    lateinit var myUserList: ArrayList<Users>
+    lateinit var myAdapter: MyUsersAdapter // Changed to MyUsersAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recycler_view)
+        fetchData()
+        myUserList = ArrayList()
+        myAdapter = MyUsersAdapter(myUserList)
 
-        var makeCall = ApiCllient.retrofitBuilder.getData()
+        val myRecyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        myRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        myRecyclerView.adapter = myAdapter
+    }
 
-        makeCall.enqueue(object  : Callback<List<Users>>{
+    private fun fetchData() {
+        val makeCall = ApiCllient.retrofitBuilder.getData()
+
+        makeCall.enqueue(object : Callback<List<Users>> {
             override fun onResponse(call: Call<List<Users>>?, response: Response<List<Users>>?) {
-                var myUserList : List<Users>? = response!!.body()
-                Log.i("mytag", "$myUserList")
+                val usersList: List<Users>? = response?.body()
+                if (usersList != null) {
+                    myUserList.clear() // Clear existing data
+                    myUserList.addAll(usersList) // Add new data
+                    myAdapter.notifyDataSetChanged() // Notify adapter about the changes
+                }
             }
 
             override fun onFailure(call: Call<List<Users>>?, t: Throwable?) {
-               Log.i("mytag", "Error is ${t.toString()}" )
+                Log.i("mytag", "Error is ${t.toString()}")
             }
-
-        } )
-
-
-
-
-
-
-
-
-
-
-
-        var myRecyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-        myRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-
-        mySingerlist = ArrayList<SingersData>()
-        myRecyclerView.adapter = MyAdapter(mySingerlist)
-
-
-        settiingData()
-
-    }
-
-    private fun settiingData() {
-
-        var s1 = SingersData("Arjit Singh", "Hindi")
-        mySingerlist.add(s1)
-        var s2 = SingersData("Uddayvh", "Hindi")
-        mySingerlist.add(s2)
-        var s3 = SingersData("kumar sanu", "Hindi")
-        mySingerlist.add(s3)
-        var s4 = SingersData("debashis", "English")
-        mySingerlist.add(s4)
-        var s5 = SingersData("Arjit Singh", "Hindi")
-        mySingerlist.add(s5)
-        var s6 = SingersData("Arjit Singh", "Hindi")
-        mySingerlist.add(s6)
-        var s7 = SingersData("Arjit Singh", "Hindi")
-        mySingerlist.add(s7)
+        })
     }
 }

@@ -4,10 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.recyclerview.widget.RecyclerView
 
-class MyAdapter(var singerList : ArrayList<SingersData>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+class MyAdapter(var singerList: ArrayList<Users>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
@@ -31,6 +30,6 @@ class MyAdapter(var singerList : ArrayList<SingersData>) : RecyclerView.Adapter<
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-       holder.myBindData(singerList[position])
+      // holder.myBindData(singerList[position])
     }
 }
